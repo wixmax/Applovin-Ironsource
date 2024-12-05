@@ -62,12 +62,12 @@ public class NativeAdViewHolder extends RecyclerView.ViewHolder {
     //AdMob
 //    MediaView mediaView;
 //    TemplateView admobNativeAd;
-    LinearLayout admobNativeBackground;
+//    LinearLayout admobNativeBackground;
 
     //Ad Manager
 //    MediaView adManagerMediaView;
 //    AdManagerTemplateView adManagerNativeAd;
-    LinearLayout adManagerNativeBackground;
+//    LinearLayout adManagerNativeBackground;
 
     //StartApp
     View startappNativeAd;

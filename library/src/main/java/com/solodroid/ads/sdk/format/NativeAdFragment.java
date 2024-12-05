@@ -202,11 +202,11 @@ public class NativeAdFragment {
 
 //                admobNativeAd = view.findViewById(R.id.admob_native_ad_container);
 //                mediaView = view.findViewById(R.id.media_view);
-                admobNativeBackground = view.findViewById(R.id.background);
+//                admobNativeBackground = view.findViewById(R.id.background);
 
 //                adManagerNativeAd = view.findViewById(R.id.google_ad_manager_native_ad_container);
 //                adManagerMediaView = view.findViewById(R.id.ad_manager_media_view);
-                adManagerNativeBackground = view.findViewById(R.id.ad_manager_background);
+//                adManagerNativeBackground = view.findViewById(R.id.ad_manager_background);
 
                 startappNativeAd = view.findViewById(R.id.startapp_native_ad_container);
                 startappNativeImage = view.findViewById(R.id.startapp_native_image);
