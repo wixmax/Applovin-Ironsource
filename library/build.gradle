@@ -1,7 +1,9 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
-
+group = 'com.github.wixmax'
+version = '1.1.2'
 android {
     namespace 'com.solodroid.ads.sdk'
     compileSdk 34
@@ -27,6 +29,9 @@ android {
     lintOptions {
         disable 'GradleDependency'
     }
+    publishing {
+        singleVariant("release") //then,print->Components: [release]
+    }
 }
 
 
@@ -50,4 +55,17 @@ dependencies {
     //GDPR
     implementation 'com.google.android.ump:user-messaging-platform:2.2.0'
 
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.release
+                groupId = 'com.github.wixmax'
+                artifactId = 'Applovin-Ironsource'
+                version = '1.1.2'
+            }
+        }
+    }
 }
