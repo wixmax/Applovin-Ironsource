@@ -57,30 +57,30 @@ public class SmallNativeAdView extends LinearLayout {
         inflate(mContext, R.layout.view_native_ad_news, this);
         TypedArray arr = mContext.obtainStyledAttributes(attrs, R.styleable.NativeAdView, styleAttr, 0);
 
-        adMobDrawable = arr.getDrawable(R.styleable.NativeAdView_adMobNativeButton);
+//        adMobDrawable = arr.getDrawable(R.styleable.NativeAdView_adMobNativeButton);
         startAppDrawable = arr.getDrawable(R.styleable.NativeAdView_startappNativeButton);
 
-        btnNativeAdMob = findViewById(R.id.cta);
-        btnNativeStartApp = findViewById(R.id.startapp_native_button);
+//        btnNativeAdMob = findViewById(R.id.cta);
+//        btnNativeStartApp = findViewById(R.id.startapp_native_button);
 
-        if (adMobDrawable != null) {
-            setAdMobNativeButtonColor(adMobDrawable);
-        }
-
-        if (startAppDrawable != null) {
-            setStartAppNativeButtonColor(startAppDrawable);
-        }
+//        if (adMobDrawable != null) {
+//            setAdMobNativeButtonColor(adMobDrawable);
+//        }
+//
+//        if (startAppDrawable != null) {
+//            setStartAppNativeButtonColor(startAppDrawable);
+//        }
 
         arr.recycle();
 
     }
 
-    public void setAdMobNativeButtonColor(Drawable background) {
-        btnNativeAdMob.setBackground(background);
-    }
-
-    public void setStartAppNativeButtonColor(Drawable background) {
-        btnNativeStartApp.setBackground(background);
-    }
+//    public void setAdMobNativeButtonColor(Drawable background) {
+//        btnNativeAdMob.setBackground(background);
+//    }
+//
+//    public void setStartAppNativeButtonColor(Drawable background) {
+//        btnNativeStartApp.setBackground(background);
+//    }
 
 }

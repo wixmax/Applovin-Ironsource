@@ -164,14 +164,14 @@ public class NativeAdViewPager {
 //                adManagerMediaView = view.findViewById(R.id.ad_manager_media_view);
 //                adManagerNativeBackground = view.findViewById(R.id.ad_manager_background);
 
-                startappNativeAd = view.findViewById(R.id.startapp_native_ad_container);
-                startappNativeImage = view.findViewById(R.id.startapp_native_image);
-                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
-                startappNativeTitle = view.findViewById(R.id.startapp_native_title);
-                startappNativeDescription = view.findViewById(R.id.startapp_native_description);
-                startappNativeButton = view.findViewById(R.id.startapp_native_button);
-                startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
-                startappNativeBackground = view.findViewById(R.id.startapp_native_background);
+//                startappNativeAd = view.findViewById(R.id.startapp_native_ad_container);
+//                startappNativeImage = view.findViewById(R.id.startapp_native_image);
+//                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
+//                startappNativeTitle = view.findViewById(R.id.startapp_native_title);
+//                startappNativeDescription = view.findViewById(R.id.startapp_native_description);
+//                startappNativeButton = view.findViewById(R.id.startapp_native_button);
+//                startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
+//                startappNativeBackground = view.findViewById(R.id.startapp_native_background);
                 applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container);
                 progressBarAd = view.findViewById(R.id.progress_bar_ad);
                 progressBarAd.setVisibility(View.VISIBLE);
@@ -258,14 +258,14 @@ public class NativeAdViewPager {
 //                adManagerMediaView = view.findViewById(R.id.ad_manager_media_view);
 //                adManagerNativeBackground = view.findViewById(R.id.ad_manager_background);
 
-                startappNativeAd = view.findViewById(R.id.startapp_native_ad_container);
-                startappNativeImage = view.findViewById(R.id.startapp_native_image);
-                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
-                startappNativeTitle = view.findViewById(R.id.startapp_native_title);
-                startappNativeDescription = view.findViewById(R.id.startapp_native_description);
-                startappNativeButton = view.findViewById(R.id.startapp_native_button);
-                startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
-                startappNativeBackground = view.findViewById(R.id.startapp_native_background);
+//                startappNativeAd = view.findViewById(R.id.startapp_native_ad_container);
+//                startappNativeImage = view.findViewById(R.id.startapp_native_image);
+//                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
+//                startappNativeTitle = view.findViewById(R.id.startapp_native_title);
+//                startappNativeDescription = view.findViewById(R.id.startapp_native_description);
+//                startappNativeButton = view.findViewById(R.id.startapp_native_button);
+//                startappNativeButton.setOnClickListener(v1 -> startappNativeAd.performClick());
+//                startappNativeBackground = view.findViewById(R.id.startapp_native_background);
                 applovinNativeAd = view.findViewById(R.id.applovin_native_ad_container);
                 progressBarAd = view.findViewById(R.id.progress_bar_ad);
                 progressBarAd.setVisibility(View.VISIBLE);

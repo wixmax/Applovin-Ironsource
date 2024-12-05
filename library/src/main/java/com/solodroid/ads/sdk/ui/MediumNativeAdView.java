@@ -59,8 +59,8 @@ public class MediumNativeAdView extends LinearLayout {
         adMobDrawable = arr.getDrawable(R.styleable.NativeAdView_adMobNativeButton);
         startAppDrawable = arr.getDrawable(R.styleable.NativeAdView_startappNativeButton);
 
-        btnNativeAdMob = findViewById(R.id.cta);
-        btnNativeStartApp = findViewById(R.id.startapp_native_button);
+//        btnNativeAdMob = findViewById(R.id.cta);
+//        btnNativeStartApp = findViewById(R.id.startapp_native_button);
 
         if (adMobDrawable != null) {
             setAdMobNativeButtonColor(adMobDrawable);

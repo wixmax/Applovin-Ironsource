@@ -211,19 +211,19 @@ public class NativeAd {
 //                adManagerMediaView = activity.findViewById(R.id.ad_manager_media_view);
 //                adManagerNativeBackground = activity.findViewById(R.id.ad_manager_background);
 
-                startappNativeAd = activity.findViewById(R.id.startapp_native_ad_container);
-                startappNativeImage = activity.findViewById(R.id.startapp_native_image);
-                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
-                startappNativeTitle = activity.findViewById(R.id.startapp_native_title);
-                startappNativeDescription = activity.findViewById(R.id.startapp_native_description);
-                startappNativeButton = activity.findViewById(R.id.startapp_native_button);
-                startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
-                startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
+//                startappNativeAd = activity.findViewById(R.id.startapp_native_ad_container);
+//                startappNativeImage = activity.findViewById(R.id.startapp_native_image);
+//                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
+//                startappNativeTitle = activity.findViewById(R.id.startapp_native_title);
+//                startappNativeDescription = activity.findViewById(R.id.startapp_native_description);
+//                startappNativeButton = activity.findViewById(R.id.startapp_native_button);
+//                startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
+//                startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
 
                 applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container);
                 appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container);
 
-                wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
+//                wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
 
                 switch (adNetwork) {
                     case ADMOB:
@@ -349,19 +349,19 @@ public class NativeAd {
 //                adManagerMediaView = activity.findViewById(R.id.ad_manager_media_view);
 //                adManagerNativeBackground = activity.findViewById(R.id.ad_manager_background);
 
-                startappNativeAd = activity.findViewById(R.id.startapp_native_ad_container);
-                startappNativeImage = activity.findViewById(R.id.startapp_native_image);
-                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
-                startappNativeTitle = activity.findViewById(R.id.startapp_native_title);
-                startappNativeDescription = activity.findViewById(R.id.startapp_native_description);
-                startappNativeButton = activity.findViewById(R.id.startapp_native_button);
-                startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
-                startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
+//                startappNativeAd = activity.findViewById(R.id.startapp_native_ad_container);
+//                startappNativeImage = activity.findViewById(R.id.startapp_native_image);
+//                startappNativeIcon = activity.findViewById(R.id.startapp_native_icon);
+//                startappNativeTitle = activity.findViewById(R.id.startapp_native_title);
+//                startappNativeDescription = activity.findViewById(R.id.startapp_native_description);
+//                startappNativeButton = activity.findViewById(R.id.startapp_native_button);
+//                startappNativeButton.setOnClickListener(v -> startappNativeAd.performClick());
+//                startappNativeBackground = activity.findViewById(R.id.startapp_native_background);
 
                 applovinNativeAd = activity.findViewById(R.id.applovin_native_ad_container);
                 appLovinDiscoveryMrecAd = activity.findViewById(R.id.applovin_discovery_mrec_ad_container);
 
-                wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
+//                wortiseNativeAd = activity.findViewById(R.id.wortise_native_ad_container);
 
                 switch (backupAdNetwork) {
                     case ADMOB:
