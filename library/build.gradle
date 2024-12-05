@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.library'
-//    id 'maven-publish'
-    id('maven-publish')
 }
 
 android {
@@ -31,17 +29,6 @@ android {
     }
 }
 
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            from components.release
-//            groupId = 'com.github.wixmax'
-//            artifactId = 'Applovin-Ironsource'
-//            version = '1.0.0'
-//        }
-//    }
-//}
-
 
 dependencies {
 
@@ -54,8 +41,6 @@ dependencies {
     implementation 'com.ironsource.sdk:mediationsdk:8.5.0'
 
 
-    //AdMob mediation
-//    implementation 'com.google.ads.mediation:applovin:12.5.0.1'
 
     //Applovin mediation
     implementation 'com.applovin.mediation:ironsource-adapter:8.4.0.0.1'
