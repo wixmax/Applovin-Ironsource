@@ -43,6 +43,11 @@ import com.applovin.sdk.AppLovinSdkUtils;
 import com.solodroid.ads.sdk.R;
 //import com.solodroid.ads.sdk.helper.AppLovinCustomEventBanner;
 import com.solodroid.ads.sdk.util.Tools;
+import com.unity3d.mediation.LevelPlayAdError;
+import com.unity3d.mediation.LevelPlayAdInfo;
+import com.unity3d.mediation.LevelPlayAdSize;
+import com.unity3d.mediation.banner.LevelPlayBannerAdView;
+import com.unity3d.mediation.banner.LevelPlayBannerAdViewListener;
 
 public class BannerAd {
 
@@ -260,48 +265,39 @@ public class BannerAd {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
-                        ISBannerSize size = ISBannerSize.BANNER;
-                        ironSourceBannerLayout = IronSource.createBanner(activity, size);
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-                        ironSourceBannerView.addView(ironSourceBannerLayout, 0, layoutParams);
-                        if (ironSourceBannerLayout != null) {
-                            ironSourceBannerLayout.setLevelPlayBannerListener(new LevelPlayBannerListener() {
+                        Log.w(TAG,"ironsource_banner_view_container");
+                        LevelPlayAdSize size = LevelPlayAdSize.createAdaptiveAdSize(activity);
+//                        ISBannerSize size = ISBannerSize.BANNER;
+                        if (size != null) {
+                            LevelPlayBannerAdView bannerAd = new LevelPlayBannerAdView(activity, ironSourceBannerId);
+                            bannerAd.setAdSize(size);
+
+                            // set the banner listener
+                            bannerAd.setBannerListener(new LevelPlayBannerAdViewListener() {
                                 @Override
-                                public void onAdLoaded(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdLoaded");
+                                public void onAdLoaded(LevelPlayAdInfo adInfo) {
+                                    Log.w(TAG, "adInfo = " + adInfo);
                                     ironSourceBannerView.setVisibility(View.VISIBLE);
                                 }
 
                                 @Override
-                                public void onAdLoadFailed(IronSourceError ironSourceError) {
-                                    Log.d(TAG, "onBannerAdLoadFailed" + " " + ironSourceError.getErrorMessage());
+                                public void onAdLoadFailed(LevelPlayAdError adInfo) {
+                                    Log.w(TAG, "error = " + adInfo);
                                     loadBackupBannerAd();
-                                }
 
-                                @Override
-                                public void onAdClicked(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdClicked");
-                                }
-
-                                @Override
-                                public void onAdLeftApplication(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdLeftApplication");
-                                }
-
-                                @Override
-                                public void onAdScreenPresented(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdScreenPresented");
-                                }
-
-                                @Override
-                                public void onAdScreenDismissed(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdScreenDismissed");
                                 }
                             });
-                            IronSource.loadBanner(ironSourceBannerLayout, ironSourceBannerId);
-                        } else {
-                            Log.d(TAG, "IronSource.createBanner returned null");
+
+                            // add LevelPlayBannerAdView to your container
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+                            ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
+                            ironSourceBannerView.addView(bannerAd, 0, layoutParams);
+
+                            bannerAd.loadAd();
+
+                        }
+                        else {
+                            Log.w(TAG, "IronSource.createBanner returned null");
                         }
                         break;
 
@@ -413,47 +409,39 @@ public class BannerAd {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
-                        ISBannerSize size = ISBannerSize.BANNER;
-                        ironSourceBannerLayout = IronSource.createBanner(activity, size);
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-                        ironSourceBannerView.addView(ironSourceBannerLayout, 0, layoutParams);
-                        if (ironSourceBannerLayout != null) {
-                            ironSourceBannerLayout.setLevelPlayBannerListener(new LevelPlayBannerListener() {
+                        Log.w(TAG,"ironsource_banner_view_container");
+                        LevelPlayAdSize size = LevelPlayAdSize.createAdaptiveAdSize(activity);
+//                        ISBannerSize size = ISBannerSize.BANNER;
+                        if (size != null) {
+                            LevelPlayBannerAdView bannerAd = new LevelPlayBannerAdView(activity, ironSourceBannerId);
+                            bannerAd.setAdSize(size);
+
+                            // set the banner listener
+                            bannerAd.setBannerListener(new LevelPlayBannerAdViewListener() {
                                 @Override
-                                public void onAdLoaded(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdLoaded");
+                                public void onAdLoaded(LevelPlayAdInfo adInfo) {
+                                    Log.w(TAG, "adInfo = " + adInfo);
                                     ironSourceBannerView.setVisibility(View.VISIBLE);
                                 }
 
                                 @Override
-                                public void onAdLoadFailed(IronSourceError ironSourceError) {
-                                    Log.d(TAG, "onBannerAdLoadFailed" + " " + ironSourceError.getErrorMessage());
-                                }
+                                public void onAdLoadFailed(LevelPlayAdError adInfo) {
+                                    Log.w(TAG, "error = " + adInfo);
+                                    loadBackupBannerAd();
 
-                                @Override
-                                public void onAdClicked(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdClicked");
-                                }
-
-                                @Override
-                                public void onAdLeftApplication(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdLeftApplication");
-                                }
-
-                                @Override
-                                public void onAdScreenPresented(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdScreenPresented");
-                                }
-
-                                @Override
-                                public void onAdScreenDismissed(AdInfo adInfo) {
-                                    Log.d(TAG, "onBannerAdScreenDismissed");
                                 }
                             });
-                            IronSource.loadBanner(ironSourceBannerLayout, ironSourceBannerId);
-                        } else {
-                            Log.d(TAG, "IronSource.createBanner returned null");
+
+                            // add LevelPlayBannerAdView to your container
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+                            ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
+                            ironSourceBannerView.addView(bannerAd, 0, layoutParams);
+
+                            bannerAd.loadAd();
+
+                        }
+                        else {
+                            Log.w(TAG, "IronSource.createBanner returned null");
                         }
                         break;
 

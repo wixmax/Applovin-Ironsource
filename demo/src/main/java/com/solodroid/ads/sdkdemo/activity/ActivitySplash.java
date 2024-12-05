@@ -48,7 +48,7 @@ public class ActivitySplash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         sharedPref = new SharedPref(this);
-        initAds();
+        if (!isIronsource()) initAds();
 
         if (Constant.AD_STATUS.equals(AD_STATUS_ON) && Constant.OPEN_ADS_ON_START) {
             if (!Constant.FORCE_TO_SHOW_APP_OPEN_AD_ON_START) {
@@ -147,6 +147,10 @@ public class ActivitySplash extends AppCompatActivity {
                 .setWortiseAppId(Constant.WORTISE_APP_ID)
                 .setDebug(BuildConfig.DEBUG)
                 .build();
+    }
+
+    public boolean isIronsource(){
+        return Constant.AD_NETWORK.equals("ironsource");
     }
 
     private void loadOpenAds() {

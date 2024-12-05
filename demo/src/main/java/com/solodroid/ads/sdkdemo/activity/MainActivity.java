@@ -1,6 +1,7 @@
 package com.solodroid.ads.sdkdemo.activity;
 
 import static com.solodroid.ads.sdk.util.Constant.ADMOB;
+import static com.solodroid.ads.sdk.util.Constant.AD_STATUS_ON;
 import static com.solodroid.ads.sdk.util.Constant.APPLOVIN_DISCOVERY;
 import static com.solodroid.ads.sdk.util.Constant.APPLOVIN_MAX;
 import static com.solodroid.ads.sdk.util.Constant.FAN;
@@ -93,15 +94,15 @@ public class MainActivity extends AppCompatActivity {
         bannerAdView.addView(View.inflate(this, com.solodroid.ads.sdk.R.layout.view_banner_ad, null));
 
         initAds();
-        loadGdpr();
-        loadOpenAds();
-        loadBannerAd();
-        loadInterstitialAd();
-        loadRewardedAd();
+        if(!isIronsource())loadGdpr();
+        if(!isIronsource())loadOpenAds();
+//        if(!isIronsource())loadBannerAd();
+//        if(!isIronsource())loadInterstitialAd();
+//        if(!isIronsource())loadRewardedAd();
 
         nativeAdViewContainer = findViewById(R.id.native_ad);
         setNativeAdStyle(nativeAdViewContainer);
-        loadNativeAd();
+        if(!isIronsource())loadNativeAd();
 
         btnInterstitial = findViewById(R.id.btn_interstitial);
         btnInterstitial.setOnClickListener(v -> {
@@ -135,7 +136,36 @@ public class MainActivity extends AppCompatActivity {
                 .setIronSourceAppKey(Constant.IRONSOURCE_APP_KEY)
                 .setWortiseAppId(Constant.WORTISE_APP_ID)
                 .setDebug(BuildConfig.DEBUG)
-                .build();
+                .build(new AdNetwork.Initialize.LevelPlayInitCallback() {
+                    @Override
+                    public void onInitSuccess() {
+                        loadBannerAd();
+//                        loadInterstitialAd();
+//                        loadRewardedAd();
+                        Log.d("AdNetwork", "Initialization successful");
+                        // Initialization complete, proceed with ads
+                    }
+
+                    @Override
+                    public void onInitFailed(String error) {
+                        Log.d("AdNetwork", "Initialization failed: " + error);
+                    }
+                });
+//        if (isIronsource()) {
+//            if (adNetwork.isInitialized()) {
+//                loadBannerAd();
+//                loadInterstitialAd();
+//                loadRewardedAd();
+//                Log.d("AdNetwork", "Initialization successful");
+//
+//            } else {
+//                Log.d("AdNetwork", "Initialization failed");
+//            }
+//        }
+    }
+
+    public boolean isIronsource(){
+        return Constant.AD_NETWORK.equals("ironsource");
     }
 
     private void loadGdpr() {
@@ -315,7 +345,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        bannerAd.loadBannerAd();
+        if (bannerAd != null)
+         bannerAd.loadBannerAd();
     }
 
     public void getAppTheme() {

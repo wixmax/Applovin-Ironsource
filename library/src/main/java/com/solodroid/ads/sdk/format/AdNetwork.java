@@ -16,16 +16,22 @@ import static com.solodroid.ads.sdk.util.Constant.NONE;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.applovin.sdk.AppLovinMediationProvider;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkConfiguration;
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
-import com.ironsource.mediationsdk.IronSource;
-import com.ironsource.mediationsdk.sdk.InitializationListener;
+import com.unity3d.mediation.LevelPlay;
+import com.unity3d.mediation.LevelPlayConfiguration;
+import com.unity3d.mediation.LevelPlayInitError;
+import com.unity3d.mediation.LevelPlayInitListener;
+import com.unity3d.mediation.LevelPlayInitRequest;
 //import com.google.android.gms.ads.MobileAds;
 //import com.google.android.gms.ads.initialization.AdapterStatus;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 public class AdNetwork {
 
@@ -45,13 +51,22 @@ public class AdNetwork {
         private String wortiseAppId = "";
         private boolean debug = true;
 
+        public interface LevelPlayInitCallback {
+            void onInitSuccess();
+            void onInitFailed(String error);
+        }
         public Initialize(Activity activity) {
             this.activity = activity;
         }
 
+        public Initialize build(final LevelPlayInitCallback callback) {
+            initAds(callback);
+            initBackupAds(callback);
+            return this;
+        }
         public Initialize build() {
-            initAds();
-            initBackupAds();
+            initAds(null);
+            initBackupAds(null);
             return this;
         }
 
@@ -110,7 +125,11 @@ public class AdNetwork {
             return this;
         }
 
-        public void initAds() {
+
+
+
+
+        public void initAds(final LevelPlayInitCallback callback) {
             if (adStatus.equals(AD_STATUS_ON)) {
                 switch (adNetwork) {
                     case ADMOB:
@@ -142,11 +161,34 @@ public class AdNetwork {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        String advertisingId = IronSource.getAdvertiserId(activity);
-                        IronSource.setUserId(advertisingId);
-                        IronSource.init(activity, ironSourceAppKey, () -> {
-                            Log.d(TAG, "[" + adNetwork + "] initialize complete");
-                        });
+
+                        // Init the SDK when implementing the Multiple Ad Units Interstitial and Banner APIs, and Rewarded using legacy APIs
+                        List<LevelPlay.AdFormat> legacyAdFormats = Arrays.asList(LevelPlay.AdFormat.REWARDED);
+
+                        LevelPlayInitRequest initRequest = new LevelPlayInitRequest.Builder(ironSourceAppKey)
+                                .withLegacyAdFormats(legacyAdFormats)
+                                .withUserId("UserID")
+                                .build();
+                        LevelPlayInitListener initListener = new LevelPlayInitListener() {
+                            @Override
+                            public void onInitFailed(@NonNull LevelPlayInitError error) {
+                                //Recommended to initialize again
+                                callback.onInitFailed(error.getErrorMessage());
+                            }
+                            @Override
+                            public void onInitSuccess(LevelPlayConfiguration configuration) {
+                                //Create ad objects and load ads
+                                Log.w(TAG,"onInitSuccess");
+                                callback.onInitSuccess();
+                            }
+                        };
+                        LevelPlay.init(activity, initRequest, initListener);
+
+//                        String advertisingId = IronSource.getAdvertiserId(activity);
+//                        IronSource.setUserId(advertisingId);
+//                        IronSource.init(activity, ironSourceAppKey, () -> {
+//                            Log.d(TAG, "[" + adNetwork + "] initialize complete");
+//                        });
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.REWARDED_VIDEO);
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.INTERSTITIAL);
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.BANNER);
@@ -159,7 +201,7 @@ public class AdNetwork {
             }
         }
 
-        public void initBackupAds() {
+        public void initBackupAds(final LevelPlayInitCallback callback) {
             if (adStatus.equals(AD_STATUS_ON)) {
                 switch (backupAdNetwork) {
                     case ADMOB:
@@ -182,11 +224,33 @@ public class AdNetwork {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        String advertisingId = IronSource.getAdvertiserId(activity);
-                        IronSource.setUserId(advertisingId);
-                        IronSource.init(activity, ironSourceAppKey, () -> {
-                            Log.d(TAG, "[" + adNetwork + "] initialize complete");
-                        });
+
+                        // Init the SDK when implementing the Multiple Ad Units Interstitial and Banner APIs, and Rewarded using legacy APIs
+                        List<LevelPlay.AdFormat> legacyAdFormats = Arrays.asList(LevelPlay.AdFormat.REWARDED);
+
+                        LevelPlayInitRequest initRequest = new LevelPlayInitRequest.Builder(ironSourceAppKey)
+                                .withLegacyAdFormats(legacyAdFormats)
+                                .withUserId("UserID")
+                                .build();
+                        LevelPlayInitListener initListener = new LevelPlayInitListener() {
+                            @Override
+                            public void onInitFailed(@NonNull LevelPlayInitError error) {
+                                //Recommended to initialize again
+                                callback.onInitFailed(error.getErrorMessage());
+                            }
+                            @Override
+                            public void onInitSuccess(LevelPlayConfiguration configuration) {
+                                //Create ad objects and load ads
+                                callback.onInitSuccess();
+                            }
+                        };
+                        LevelPlay.init(activity, initRequest, initListener);
+
+//                        String advertisingId = IronSource.getAdvertiserId(activity);
+//                        IronSource.setUserId(advertisingId);
+//                        IronSource.init(activity, ironSourceAppKey, () -> {
+//                            Log.d(TAG, "[" + adNetwork + "] initialize complete");
+//                        });
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.REWARDED_VIDEO);
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.INTERSTITIAL);
 //                        IronSource.init(activity, ironSourceAppKey, IronSource.AD_UNIT.BANNER);
