@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.library'
+//    id 'maven-publish'
+    id('maven-publish')
 }
 
 android {
@@ -28,6 +30,18 @@ android {
         disable 'GradleDependency'
     }
 }
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.release
+//            groupId = 'com.github.wixmax'
+//            artifactId = 'Applovin-Ironsource'
+//            version = '1.0.0'
+//        }
+//    }
+//}
+
 
 dependencies {
 
