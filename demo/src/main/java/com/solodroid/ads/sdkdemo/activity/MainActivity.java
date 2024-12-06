@@ -53,7 +53,7 @@ import com.solodroid.ads.sdk.util.OnRewardedAdErrorListener;
 import com.solodroid.ads.sdkdemo.BuildConfig;
 import com.solodroid.ads.sdkdemo.R;
 import com.solodroid.ads.sdkdemo.data.Constant;
-import com.solodroid.ads.sdkdemo.data.mConstant;
+//import com.solodroid.ads.sdkdemo.data.mConstant;
 import com.solodroid.ads.sdkdemo.database.SharedPref;
 
 public class MainActivity extends AppCompatActivity {
