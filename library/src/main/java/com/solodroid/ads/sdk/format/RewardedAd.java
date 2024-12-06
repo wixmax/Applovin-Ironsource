@@ -45,6 +45,11 @@ import com.solodroid.ads.sdk.util.OnRewardedAdCompleteListener;
 import com.solodroid.ads.sdk.util.OnRewardedAdDismissedListener;
 import com.solodroid.ads.sdk.util.OnRewardedAdErrorListener;
 import com.solodroid.ads.sdk.util.Tools;
+import com.unity3d.mediation.LevelPlayAdError;
+import com.unity3d.mediation.LevelPlayAdInfo;
+import com.unity3d.mediation.rewarded.LevelPlayReward;
+import com.unity3d.mediation.rewarded.LevelPlayRewardedAd;
+import com.unity3d.mediation.rewarded.LevelPlayRewardedAdListener;
 
 
 public class RewardedAd {
@@ -69,6 +74,7 @@ public class RewardedAd {
         private String applovinMaxRewardedId = "";
         private String applovinDiscRewardedZoneId = "";
         private String ironSourceRewardedId = "";
+        private LevelPlayRewardedAd mRewardedAd;
         private String wortiseRewardedId = "";
         private String alienAdsRewardedId = "";
         private int placementStatus = 1;
@@ -78,13 +84,18 @@ public class RewardedAd {
             this.activity = activity;
         }
 
-        public Builder build(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss) {
-            loadRewardedAd(onComplete, onDismiss);
+        public interface RewardedAdListener {
+            void onRewardedAdComplete();
+            void onRewardedAdError();
+        }
+
+        public Builder build(final RewardedAdListener callback) {
+            loadRewardedAd(callback);
             return this;
         }
 
-        public Builder show(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss, OnRewardedAdErrorListener onError) {
-            showRewardedAd(onComplete, onDismiss, onError);
+        public Builder show(final RewardedAdListener callback) {
+            showRewardedAd(callback);
             return this;
         }
 
@@ -158,8 +169,9 @@ public class RewardedAd {
             return this;
         }
 
-        public void loadRewardedAd(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss) {
+        public void loadRewardedAd(final RewardedAdListener callback) {
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
+                Log.w(TAG,"loadRewardedAd 1");
                 switch (mainAds) {
                     case APPLOVIN:
                     case APPLOVIN_MAX:
@@ -169,7 +181,7 @@ public class RewardedAd {
                         applovinMaxRewardedAd.setListener(new MaxRewardedAdListener() {
                             @Override
                             public void onUserRewarded(@NonNull MaxAd maxAd, @NonNull MaxReward maxReward) {
-                                onComplete.onRewardedAdComplete();
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad complete");
                             }
 
@@ -196,8 +208,8 @@ public class RewardedAd {
 
                             @Override
                             public void onAdHidden(@NonNull MaxAd maxAd) {
-                                loadRewardedAd(onComplete, onDismiss);
-                                onComplete.onRewardedAdComplete();
+                                loadRewardedAd(callback);
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad hidden");
                             }
 
@@ -208,13 +220,13 @@ public class RewardedAd {
 
                             @Override
                             public void onAdLoadFailed(@NonNull String s, @NonNull MaxError maxError) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + maxError.getMessage() + ", try to load backup ad: " + backupAds);
                             }
 
                             @Override
                             public void onAdDisplayFailed(@NonNull MaxAd maxAd, @NonNull MaxError maxError) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + maxError.getMessage() + ", try to load backup ad: " + backupAds);
                             }
                         });
@@ -234,7 +246,7 @@ public class RewardedAd {
 
                             @Override
                             public void failedToReceiveAd(int errorCode) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + errorCode + ", try to load backup ad: " + backupAds);
                             }
                         });
@@ -247,17 +259,62 @@ public class RewardedAd {
 
                             @Override
                             public void adHidden(AppLovinAd appLovinAd) {
-                                loadRewardedAd(onComplete, onDismiss);
-                                onComplete.onRewardedAdComplete();
+                                loadRewardedAd(callback);
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "ad hidden");
                             }
                         });
+                        break;
+
+                    case IRONSOURCE:
+                    case FAN_BIDDING_IRONSOURCE:
+                        Log.w(TAG,"loadRewardedAd 2 : "+ironSourceRewardedId);
+                        mRewardedAd = new LevelPlayRewardedAd(ironSourceRewardedId);
+                        mRewardedAd.setListener(new LevelPlayRewardedAdListener() {
+                            @Override
+                            public void onAdLoaded(LevelPlayAdInfo levelPlayAdInfo) {
+                                Log.w(TAG,"loadRewardedAd 3");
+                                Log.d(TAG, "[" + mainAds + "] " + "rewarded ad is ready");
+                            }
+
+                            @Override
+                            public void onAdLoadFailed(LevelPlayAdError levelPlayAdError) {
+                                Log.w(TAG,"loadRewardedAd 5");
+                                loadRewardedBackupAd(callback);
+                                Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + levelPlayAdError.getErrorMessage() + ", try to load backup ad: " + backupAds);
+
+                            }
+
+                            @Override
+                            public void onAdDisplayed(LevelPlayAdInfo levelPlayAdInfo) {
+
+                            }
+
+                            @Override
+                            public void onAdDisplayFailed(@NonNull LevelPlayAdError error, @NonNull LevelPlayAdInfo adInfo) {
+                                Log.w(TAG,"loadRewardedAd 5");
+                                loadRewardedBackupAd(callback);
+                                Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + error.getErrorMessage() + ", try to load backup ad: " + backupAds);
+                            }
+                            @Override
+                            public void onAdClosed(@NonNull LevelPlayAdInfo adInfo) {
+                                loadRewardedAd(callback);
+                            }
+
+                            @Override
+                            public void onAdRewarded(LevelPlayReward levelPlayReward, LevelPlayAdInfo levelPlayAdInfo) {
+                                callback.onRewardedAdComplete();
+                                Log.d(TAG, "[" + mainAds + "] " + "rewarded ad complete");
+
+                            }
+                        });
+                        mRewardedAd.loadAd();
                         break;
                 }
             }
         }
 
-        public void loadRewardedBackupAd(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss) {
+        public void loadRewardedBackupAd(final RewardedAdListener callback) {
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
                 switch (backupAds) {
                     case APPLOVIN:
@@ -268,7 +325,7 @@ public class RewardedAd {
                         applovinMaxRewardedAd.setListener(new MaxRewardedAdListener() {
                             @Override
                             public void onUserRewarded(@NonNull MaxAd maxAd, @NonNull MaxReward maxReward) {
-                                onComplete.onRewardedAdComplete();
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad complete");
                             }
 
@@ -284,8 +341,8 @@ public class RewardedAd {
 
                             @Override
                             public void onAdHidden(@NonNull MaxAd maxAd) {
-                                loadRewardedAd(onComplete, onDismiss);
-                                onComplete.onRewardedAdComplete();
+                                loadRewardedAd(callback);
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad hidden");
                             }
 
@@ -296,13 +353,13 @@ public class RewardedAd {
 
                             @Override
                             public void onAdLoadFailed(@NonNull String s, @NonNull MaxError maxError) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + maxError.getMessage() + ", try to load backup ad: " + backupAds);
                             }
 
                             @Override
                             public void onAdDisplayFailed(@NonNull MaxAd maxAd, @NonNull MaxError maxError) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + maxError.getMessage() + ", try to load backup ad: " + backupAds);
                             }
                         });
@@ -322,7 +379,7 @@ public class RewardedAd {
 
                             @Override
                             public void failedToReceiveAd(int errorCode) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
+                                loadRewardedBackupAd(callback);
                                 Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + errorCode + ", try to load backup ad: " + backupAds);
                             }
                         });
@@ -335,8 +392,8 @@ public class RewardedAd {
 
                             @Override
                             public void adHidden(AppLovinAd appLovinAd) {
-                                loadRewardedAd(onComplete, onDismiss);
-                                onComplete.onRewardedAdComplete();
+                                loadRewardedAd(callback);
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "ad hidden");
                             }
                         });
@@ -344,44 +401,43 @@ public class RewardedAd {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        IronSource.setLevelPlayRewardedVideoListener(new LevelPlayRewardedVideoListener() {
+                        Log.w(TAG,"loadRewardedAd 2");
+                        mRewardedAd = new LevelPlayRewardedAd(ironSourceRewardedId);
+                        mRewardedAd.setListener(new LevelPlayRewardedAdListener() {
                             @Override
-                            public void onAdAvailable(AdInfo adInfo) {
+                            public void onAdLoaded(LevelPlayAdInfo levelPlayAdInfo) {
+                                Log.w(TAG,"loadRewardedAd 3");
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad is ready");
                             }
 
                             @Override
-                            public void onAdUnavailable() {
+                            public void onAdLoadFailed(LevelPlayAdError levelPlayAdError) {
+                                Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + levelPlayAdError.getErrorMessage() + ", try to load backup ad: " + backupAds);
 
                             }
 
                             @Override
-                            public void onAdOpened(AdInfo adInfo) {
+                            public void onAdDisplayed(LevelPlayAdInfo levelPlayAdInfo) {
 
                             }
 
                             @Override
-                            public void onAdShowFailed(IronSourceError ironSourceError, AdInfo adInfo) {
-                                loadRewardedBackupAd(onComplete, onDismiss);
-                                Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + ironSourceError.getErrorMessage() + ", try to load backup ad: " + backupAds);
+                            public void onAdDisplayFailed(@NonNull LevelPlayAdError error, @NonNull LevelPlayAdInfo adInfo) {
+                                Log.d(TAG, "[" + mainAds + "] " + "failed to load rewarded ad: " + error.getErrorMessage() + ", try to load backup ad: " + backupAds);
+                            }
+                            @Override
+                            public void onAdClosed(@NonNull LevelPlayAdInfo adInfo) {
+                                loadRewardedBackupAd(callback);
                             }
 
                             @Override
-                            public void onAdClicked(Placement placement, AdInfo adInfo) {
-
-                            }
-
-                            @Override
-                            public void onAdRewarded(Placement placement, AdInfo adInfo) {
-                                onComplete.onRewardedAdComplete();
+                            public void onAdRewarded(LevelPlayReward levelPlayReward, LevelPlayAdInfo levelPlayAdInfo) {
+                                callback.onRewardedAdComplete();
                                 Log.d(TAG, "[" + mainAds + "] " + "rewarded ad complete");
-                            }
 
-                            @Override
-                            public void onAdClosed(AdInfo adInfo) {
-                                loadRewardedAd(onComplete, onDismiss);
                             }
                         });
+                        mRewardedAd.loadAd();
                         break;
 
                     default:
@@ -390,7 +446,7 @@ public class RewardedAd {
             }
         }
 
-        public void showRewardedAd(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss, OnRewardedAdErrorListener onError) {
+        public void showRewardedAd(final RewardedAdListener callback) {
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
                 switch (mainAds) {
                     case APPLOVIN:
@@ -399,7 +455,7 @@ public class RewardedAd {
                         if (applovinMaxRewardedAd != null && applovinMaxRewardedAd.isReady()) {
                             applovinMaxRewardedAd.showAd();
                         } else {
-                            showRewardedBackupAd(onComplete, onDismiss, onError);
+                            showRewardedBackupAd(callback);
                         }
                         break;
 
@@ -407,19 +463,28 @@ public class RewardedAd {
                         if (appLovinInterstitialAdDialog != null) {
                             appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                         } else {
-                            showRewardedBackupAd(onComplete, onDismiss, onError);
+                            showRewardedBackupAd(callback);
+                        }
+                        break;
+
+                    case IRONSOURCE:
+                    case FAN_BIDDING_IRONSOURCE:
+                        if(mRewardedAd.isAdReady()) {
+                            mRewardedAd.showAd(activity);
+                        } else {
+                            showRewardedBackupAd(callback);
                         }
                         break;
 
                     default:
-                        onError.onRewardedAdError();
+                        callback.onRewardedAdError();
                         break;
                 }
             }
 
         }
 
-        public void showRewardedBackupAd(OnRewardedAdCompleteListener onComplete, OnRewardedAdDismissedListener onDismiss, OnRewardedAdErrorListener onError) {
+        public void showRewardedBackupAd(final RewardedAdListener callback) {
             if (adStatus.equals(AD_STATUS_ON) && placementStatus != 0) {
                 switch (backupAds) {
                     case APPLOVIN:
@@ -428,7 +493,7 @@ public class RewardedAd {
                         if (applovinMaxRewardedAd != null && applovinMaxRewardedAd.isReady()) {
                             applovinMaxRewardedAd.showAd();
                         } else {
-                            onError.onRewardedAdError();
+                            callback.onRewardedAdError();
                         }
                         break;
 
@@ -436,21 +501,21 @@ public class RewardedAd {
                         if (appLovinInterstitialAdDialog != null) {
                             appLovinInterstitialAdDialog.showAndRender(appLovinAd);
                         } else {
-                            onError.onRewardedAdError();
+                            callback.onRewardedAdError();
                         }
                         break;
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
-                        if (IronSource.isRewardedVideoAvailable()) {
-                            IronSource.showRewardedVideo(ironSourceRewardedId);
+                        if(mRewardedAd.isAdReady()) {
+                            mRewardedAd.showAd(activity);
                         } else {
-                            onError.onRewardedAdError();
+                            callback.onRewardedAdError();
                         }
                         break;
 
                     default:
-                        onError.onRewardedAdError();
+                        callback.onRewardedAdError();
                         break;
                 }
             }

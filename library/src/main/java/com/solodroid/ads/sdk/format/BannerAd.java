@@ -266,6 +266,7 @@ public class BannerAd {
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
                         Log.w(TAG,"ironsource_banner_view_container");
+                        ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
                         LevelPlayAdSize size = LevelPlayAdSize.createAdaptiveAdSize(activity);
 //                        ISBannerSize size = ISBannerSize.BANNER;
                         if (size != null) {
@@ -409,6 +410,7 @@ public class BannerAd {
 
                     case IRONSOURCE:
                     case FAN_BIDDING_IRONSOURCE:
+                        ironSourceBannerView = activity.findViewById(R.id.ironsource_banner_view_container);
                         Log.w(TAG,"ironsource_banner_view_container");
                         LevelPlayAdSize size = LevelPlayAdSize.createAdaptiveAdSize(activity);
 //                        ISBannerSize size = ISBannerSize.BANNER;

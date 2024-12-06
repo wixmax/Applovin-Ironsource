@@ -53,6 +53,7 @@ import com.solodroid.ads.sdk.util.OnRewardedAdErrorListener;
 import com.solodroid.ads.sdkdemo.BuildConfig;
 import com.solodroid.ads.sdkdemo.R;
 import com.solodroid.ads.sdkdemo.data.Constant;
+import com.solodroid.ads.sdkdemo.data.mConstant;
 import com.solodroid.ads.sdkdemo.database.SharedPref;
 
 public class MainActivity extends AppCompatActivity {
@@ -139,9 +140,10 @@ public class MainActivity extends AppCompatActivity {
                 .build(new AdNetwork.Initialize.LevelPlayInitCallback() {
                     @Override
                     public void onInitSuccess() {
+                        loadRewardedAd();
                         loadBannerAd();
 //                        loadInterstitialAd();
-//                        loadRewardedAd();
+
                         Log.d("AdNetwork", "Initialization successful");
                         // Initialization complete, proceed with ads
                     }
@@ -250,31 +252,27 @@ public class MainActivity extends AppCompatActivity {
                 .setApplovinDiscRewardedZoneId(Constant.APPLOVIN_DISC_REWARDED_ZONE_ID)
                 .setIronSourceRewardedId(Constant.IRONSOURCE_REWARDED_ID)
                 .setWortiseRewardedId(Constant.WORTISE_REWARDED_ID)
-                .build(new OnRewardedAdCompleteListener() {
+                .build(new RewardedAd.Builder.RewardedAdListener() {
                     @Override
                     public void onRewardedAdComplete() {
                         Toast.makeText(getApplicationContext(), "Rewarded complete", Toast.LENGTH_SHORT).show();
                     }
-                }, new OnRewardedAdDismissedListener() {
+
                     @Override
-                    public void onRewardedAdDismissed() {
+                    public void onRewardedAdError() {
+
 
                     }
                 });
     }
 
     private void showRewardedAd() {
-        rewardedAd.show(new OnRewardedAdCompleteListener() {
+        rewardedAd.show(new RewardedAd.Builder.RewardedAdListener() {
             @Override
             public void onRewardedAdComplete() {
                 Toast.makeText(getApplicationContext(), "Rewarded complete", Toast.LENGTH_SHORT).show();
             }
-        }, new OnRewardedAdDismissedListener() {
-            @Override
-            public void onRewardedAdDismissed() {
 
-            }
-        }, new OnRewardedAdErrorListener() {
             @Override
             public void onRewardedAdError() {
                 Toast.makeText(getApplicationContext(), "Rewarded error", Toast.LENGTH_SHORT).show();
